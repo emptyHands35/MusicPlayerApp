@@ -1,0 +1,1 @@
+export default "https://itunes.apple.com/search";
