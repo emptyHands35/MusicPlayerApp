@@ -2,7 +2,6 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  View,
 } from 'react-native';
 import MainScreen from './src/screens/MainScreen';
 
@@ -10,9 +9,8 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <MainScreen />
-      </View>
+      {/* main screen that holds, search bar, songs list and bottom player controller */}
+      <MainScreen />
     </SafeAreaView>
   );
 }
