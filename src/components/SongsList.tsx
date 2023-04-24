@@ -3,31 +3,29 @@ import React from 'react'
 import CardItem from './CardItem'
 import Colors from '../theme/Colors'
 import TrackPlayer from 'react-native-track-player'
-import { ALBUMLIST_PROPS } from '../types'
+import { SONGLIST_PROPS } from '../types'
 
 
+const SongsList = ({ data, isLoading, currentMusic, searchValue, setShowPlayer, setCurrentMusic }: SONGLIST_PROPS) => {
 
-const AlbumList = ({ data, isLoading, currentMusic, searchValue, setShowPlayer, setCurrentMusic }: ALBUMLIST_PROPS) => {
-
+    //function that handles onCard Item press and gets trackName, previewUrl and track ID as an argument
     const onSongSelectHandler = async (trackName: string, previewUrl: string, trackId: string) => {
+        TrackPlayer.reset() //resetting the player if song was previously added
+        setShowPlayer(true) //showing player at the bottom of the screen
 
-        TrackPlayer.reset()
-        setShowPlayer(true)
         let selected = {
             id: trackId,
             title: trackName,
             url: previewUrl,
         }
-        setCurrentMusic(selected);
-        let tracks = [selected]
-        await TrackPlayer.add(tracks);
-        TrackPlayer.play()
-
+        setCurrentMusic(selected); //setting current song
+        await TrackPlayer.add([selected]); //adding selected song to play
+        TrackPlayer.play() //playing the selected song
     }
 
+    //Flatlist render items function that renders CardItem for each object. CardItem displays image, song name, artist name and album
     const renderItem: ListRenderItem<any> = ({ item }) => {
         const { artworkUrl30, trackName, artistName, collectionName, previewUrl, trackId } = item
-
         return <CardItem
             onPress={onSongSelectHandler}
             artwork={artworkUrl30}
@@ -43,19 +41,21 @@ const AlbumList = ({ data, isLoading, currentMusic, searchValue, setShowPlayer, 
     return (
         <>
             <SafeAreaView>
+                {/* When songs are not loaded a spinner is displayed */}
                 {isLoading && <ActivityIndicator style={styles.indicator} size="small" color={Colors.textColor} animating={isLoading} />
                 }
 
+                {/* Flatlist to loop over each objects form data array and renders card Item*/}
                 <FlatList
                     style={styles.container}
                     data={data}
                     keyExtractor={item => item.trackId}
                     renderItem={renderItem}
                     ItemSeparatorComponent={() => {
-
                         return (<View style={{ height: 2, backgroundColor: Colors.primaryBackground }} />);
                     }}
                     ListEmptyComponent={() => {
+                        // When search results are not found below will return
                         if (searchValue && data?.length <= 0) {
                             return (
                                 <View style={styles.container}>
@@ -64,6 +64,7 @@ const AlbumList = ({ data, isLoading, currentMusic, searchValue, setShowPlayer, 
                                 </View>
                             );
                         }
+                        // Prompt message to search for artists when app is first opened
                         return (
                             <View style={styles.container}>
                                 <Text style={styles.text}>Search your artist</Text>
@@ -77,7 +78,7 @@ const AlbumList = ({ data, isLoading, currentMusic, searchValue, setShowPlayer, 
     )
 }
 
-export default AlbumList
+export default SongsList
 
 const styles = StyleSheet.create({
     title: {

@@ -6,19 +6,22 @@ import useFetchSongs from '../hooks/useFetchSongs'
 import TrackPlayer from 'react-native-track-player'
 import { CURRENT_MUSIC } from '../types'
 
-
+//Main screen container that holds all app state and renders, searchBar, Flatlist and MusicPlayer
 const MainScreen = () => {
-    const [searchValue, setSearchValue] = useState<string>("")
-    const [searchResults, setSearchResults] = useState()
-    const [showPlayer, setShowPlayer] = useState<boolean>(false)
-    const [currentMusic, setCurrentMusic] = useState<CURRENT_MUSIC>()
+    const [searchValue, setSearchValue] = useState<string>("") //useState hook to keep user input on TextInput
+    const [searchResults, setSearchResults] = useState() //Holds search results from iTunes API Call
+    const [showPlayer, setShowPlayer] = useState<boolean>(false) //Boolean to show player at the bottom of screen
+    const [currentMusic, setCurrentMusic] = useState<CURRENT_MUSIC | undefined>() //Current playing music object when user taps on item from the list or it is undefined
 
+    //useFetch hook that returns data, isLoading state and error when user types inside inputbox
     const { data, isLoading, error } = useFetchSongs(searchValue)
 
+    //useEffect hook to set searchResults once promise has returned data from API, it re-renders each time when search result data is changed
     useEffect(() => {
         setSearchResults(data)
     }, [data])
 
+    //function to setup react-native-track-player
     const setUpTrackPlayer = async () => {
         try {
             await TrackPlayer.setupPlayer();
@@ -27,6 +30,7 @@ const MainScreen = () => {
         }
     };
 
+    //calling above function insite useEffect hook to setuptrack player everytime main screen is mounted
     useEffect(() => {
         setUpTrackPlayer()
     }, []);
@@ -34,7 +38,9 @@ const MainScreen = () => {
     return (
         <>
             <View style={styles.container}>
+                {/* SearchBar that takes value, setValue and onPress callback as prop  */}
                 <SearchBar value={searchValue} setValue={setSearchValue} onPress={() => setShowPlayer(false)} />
+                {/* Flatlist that displays card items for each object from data array */}
                 <SongsList
                     searchValue={searchValue}
                     data={searchResults}
@@ -44,7 +50,8 @@ const MainScreen = () => {
                     currentMusic={currentMusic}
                     setCurrentMusic={setCurrentMusic}
                 />
-            </View >
+            </View>
+            {/* Music player / controller only displays when showPlayer & current music is TRUE */}
             <MusicPlayer showPlayer={showPlayer} currentMusic={currentMusic} />
         </>
     )
@@ -52,6 +59,7 @@ const MainScreen = () => {
 
 export default MainScreen
 
+//Styling for mainScreen component
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: Colors.spacing * 2,

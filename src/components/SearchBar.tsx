@@ -1,13 +1,9 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, TextInput } from 'react-native'
 import Colors from '../theme/Colors'
+import { Search_Bar_Props } from '../types'
 
-type Search_Bar_Props = {
-    value: string,
-    setValue: (value: string) => void;
-    onPress: () => void
-}
-
+//Searchbar which is on the top of the app, takes value, setValue and onPress props from parent component
 const SearchBar = ({ value, setValue, onPress }: Search_Bar_Props) => {
     return (
         <TextInput style={styles.inputBox}
@@ -27,7 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primaryBackground,
         padding: Colors.spacing,
         borderRadius: Colors.spacing * .5,
-        color:Colors.textColor
+        color: Colors.textColor
 
     }
 })
