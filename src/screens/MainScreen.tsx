@@ -8,7 +8,7 @@ import { CURRENT_MUSIC } from '../types'
 
 //Main screen container that holds all app state and renders, searchBar, Flatlist and MusicPlayer
 const MainScreen = () => {
-    const [searchValue, setSearchValue] = useState<string>("") //useState hook to keep user input on TextInput
+    const [searchValue, setSearchValue] = useState<string>("Ed Sheeran") //useState hook to keep user input on TextInput
     const [searchResults, setSearchResults] = useState() //Holds search results from iTunes API Call
     const [showPlayer, setShowPlayer] = useState<boolean>(false) //Boolean to show player at the bottom of screen
     const [currentMusic, setCurrentMusic] = useState<CURRENT_MUSIC | undefined>() //Current playing music object when user taps on item from the list or it is undefined
